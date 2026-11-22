@@ -1,0 +1,166 @@
+{
+  "dataset": {
+    "raw_rows": 1025,
+    "duplicates_removed": 723,
+    "unique_patients": 302,
+    "disease_prevalence": 0.45695364238410596,
+    "train_rows": 241,
+    "test_rows": 61
+  },
+  "selected_model": "Gradient Boosting",
+  "selection_criterion": "5-fold CV ROC-AUC on training split",
+  "comparison": [
+    {
+      "model": "Gradient Boosting",
+      "cv_roc_auc": 0.9239898989898989,
+      "best_params": {
+        "learning_rate": 0.1,
+        "max_depth": 1,
+        "n_estimators": 100
+      },
+      "test_roc_auc": 0.866883116883117,
+      "test_accuracy": 0.8032786885245902,
+      "test_precision": 0.7666666666666667,
+      "test_recall_sensitivity": 0.8214285714285714,
+      "test_specificity": 0.7878787878787878,
+      "test_f1": 0.7931034482758621,
+      "test_brier": 0.1494371832829341,
+      "test_confusion_matrix": [
+        [
+          26,
+          7
+        ],
+        [
+          5,
+          23
+        ]
+      ]
+    },
+    {
+      "model": "Random Forest",
+      "cv_roc_auc": 0.9212509712509712,
+      "best_params": {
+        "max_depth": 3,
+        "min_samples_leaf": 1,
+        "n_estimators": 200
+      },
+      "test_roc_auc": 0.8906926406926408,
+      "test_accuracy": 0.819672131147541,
+      "test_precision": 0.8148148148148148,
+      "test_recall_sensitivity": 0.7857142857142857,
+      "test_specificity": 0.8484848484848485,
+      "test_f1": 0.8,
+      "test_brier": 0.1415750752404689,
+      "test_confusion_matrix": [
+        [
+          28,
+          5
+        ],
+        [
+          6,
+          22
+        ]
+      ]
+    },
+    {
+      "model": "SVM (RBF)",
+      "cv_roc_auc": 0.9074462574462574,
+      "best_params": {
+        "C": 10,
+        "gamma": 0.01
+      },
+      "test_roc_auc": 0.8917748917748918,
+      "test_accuracy": 0.819672131147541,
+      "test_precision": 0.8148148148148148,
+      "test_recall_sensitivity": 0.7857142857142857,
+      "test_specificity": 0.8484848484848485,
+      "test_f1": 0.8,
+      "test_brier": 0.13210899820385236,
+      "test_confusion_matrix": [
+        [
+          28,
+          5
+        ],
+        [
+          6,
+          22
+        ]
+      ]
+    },
+    {
+      "model": "Logistic Regression",
+      "cv_roc_auc": 0.9074203574203572,
+      "best_params": {
+        "C": 10
+      },
+      "test_roc_auc": 0.8874458874458875,
+      "test_accuracy": 0.7868852459016393,
+      "test_precision": 0.7777777777777778,
+      "test_recall_sensitivity": 0.75,
+      "test_specificity": 0.8181818181818182,
+      "test_f1": 0.7636363636363637,
+      "test_brier": 0.1395171355422193,
+      "test_confusion_matrix": [
+        [
+          27,
+          6
+        ],
+        [
+          7,
+          21
+        ]
+      ]
+    },
+    {
+      "model": "KNN",
+      "cv_roc_auc": 0.8926832426832426,
+      "best_params": {
+        "n_neighbors": 21,
+        "weights": "distance"
+      },
+      "test_roc_auc": 0.8906926406926408,
+      "test_accuracy": 0.8032786885245902,
+      "test_precision": 0.8333333333333334,
+      "test_recall_sensitivity": 0.7142857142857143,
+      "test_specificity": 0.8787878787878788,
+      "test_f1": 0.7692307692307693,
+      "test_brier": 0.13457164949461367,
+      "test_confusion_matrix": [
+        [
+          29,
+          4
+        ],
+        [
+          8,
+          20
+        ]
+      ]
+    },
+    {
+      "model": "Decision Tree",
+      "cv_roc_auc": 0.8764439264439264,
+      "best_params": {
+        "max_depth": 3,
+        "min_samples_leaf": 10
+      },
+      "test_roc_auc": 0.8122294372294372,
+      "test_accuracy": 0.819672131147541,
+      "test_precision": 0.7931034482758621,
+      "test_recall_sensitivity": 0.8214285714285714,
+      "test_specificity": 0.8181818181818182,
+      "test_f1": 0.8070175438596491,
+      "test_brier": 0.17155314254983714,
+      "test_confusion_matrix": [
+        [
+          27,
+          6
+        ],
+        [
+          5,
+          23
+        ]
+      ]
+    }
+  ],
+  "sklearn_version": "1.9.1"
+}

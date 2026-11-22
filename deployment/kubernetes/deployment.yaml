@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cardioscreen-api
+  labels:
+    app: cardioscreen-api
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cardioscreen-api
+  template:
+    metadata:
+      labels:
+        app: cardioscreen-api
+        version: v1
+    spec:
+      containers:
+        - name: cardioscreen-api
+          image: ghcr.io/gethubsathvik/cardioscreen-ai:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENVIRONMENT
+              value: "production"
+            - name: LOG_LEVEL
+              value: "INFO"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: model-storage
+              mountPath: /app/models
+            - name: data-storage
+              mountPath: /app/data
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: cardioscreen-model-pvc
+        - name: data-storage
+          persistentVolumeClaim:
+            claimName: cardioscreen-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cardioscreen-api
+  labels:
+    app: cardioscreen-api
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: cardioscreen-api
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cardioscreen-model-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cardioscreen-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
