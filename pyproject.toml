@@ -81,21 +81,10 @@ ignore = [
     "E501",  # line too long (handled by black)
     "B008",  # function calls in default arguments
 ]
-per-file-ignores = {
-    "tests/*": ["S101", "T201"],  # allow assert and print in tests
-    "cardioscreen/legacy/*": ["*"],
-}
-exclude = [
-    ".venv",
-    "venv",
-    ".git",
-    "__pycache__",
-    "build",
-    "dist",
-    "*.egg-info",
-    "deployment",
-    "legacy",
-]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "T201"]
+"cardioscreen/legacy/*" = ["ALL"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -108,7 +97,7 @@ line-length = 100
 target-version = ['py310']
 include = '\.pyi?$'
 extend-exclude = '''
-/(
+/( 
   \.venv
   | venv
   | \.git
@@ -136,15 +125,16 @@ exclude = [
     ".venv",
     "venv",
 ]
+
 [[tool.mypy.overrides]]
 module = "cardioscreen.legacy.*"
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
 addopts = "-v --tb=short"
 markers = [
     "unit: Unit tests",
