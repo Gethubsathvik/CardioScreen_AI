@@ -1,23 +1,23 @@
-"""Backward-compatible predictor using new ModelService."""
+"""Load the trained artifact and serve validated predictions with explanations."""
 
 from __future__ import annotations
 
 import warnings
 from pathlib import Path
-from typing import Any
 
 import joblib
 import pandas as pd
 import sklearn
 
 from . import config
-from .core.exceptions import ModelNotFoundError
-from .models.schemas import FeatureContribution, PatientFeatures, Prediction
-from .services.model_service import ModelService
+from .schemas import FeatureContribution, PatientFeatures, Prediction
+
+
+class ModelNotFoundError(FileNotFoundError):
+    pass
 
 
 def risk_band(p: float) -> str:
-    """Get risk band from probability (backward compatible)."""
     for upper, name in config.RISK_BANDS:
         if p < upper:
             return name
@@ -25,8 +25,6 @@ def risk_band(p: float) -> str:
 
 
 class Predictor:
-    """Backward-compatible predictor interface."""
-
     def __init__(self, artifact: dict):
         self.a = artifact
         self.pipeline = artifact["pipeline"]
@@ -43,8 +41,10 @@ class Predictor:
         path = Path(path)
         if not path.exists():
             raise ModelNotFoundError(f"{path} not found. Run: python -m cardioscreen train")
+        # joblib uses pickle: only load model files you trained yourself.
         return cls(joblib.load(path))
 
+    # -- internals ---------------------------------------------------------
     def _frame(self, patients: list[PatientFeatures]) -> pd.DataFrame:
         return pd.DataFrame([p.model_dump() for p in patients])[config.FEATURE_NAMES]
 
@@ -57,6 +57,8 @@ class Predictor:
         return out
 
     def _contributions(self, p: PatientFeatures, base_p: float, top: int) -> list[FeatureContribution]:
+        """Model-agnostic local explanation: replace one feature at a time with its
+        reference (median/mode) value and measure how much the probability changes."""
         row = p.model_dump()
         variants = []
         for name in config.FEATURE_NAMES:
@@ -76,6 +78,7 @@ class Predictor:
         contribs.sort(key=lambda c: -abs(c.effect))
         return contribs[:top]
 
+    # -- public ------------------------------------------------------------
     def predict_many(self, patients: list[PatientFeatures], explain: bool = False) -> list[Prediction]:
         probs = self.pipeline.predict_proba(self._frame(patients))[:, 1]
         out = []

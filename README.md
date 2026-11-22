@@ -15,6 +15,7 @@
 git clone https://github.com/Gethubsathvik/CardioScreen_AI.git
 cd CardioScreen_AI
 pip install -r requirements-dev.txt
+python -m cardioscreen serve
 ```
 
 ### Run the Project
@@ -471,5 +472,6 @@ MIT License — see [LICENSE](LICENSE)
 
 <p align="center">
   Made with ❤️ for cardiovascular health research
-</p>#   C I   t r i g g e r  
+</p>#   C I   t r i g g e r 
+ 
  
